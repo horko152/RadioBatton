@@ -42,5 +42,10 @@ namespace DAL.Entities
 		[JsonIgnore]
 		public User User { get; set; }
 
+		[JsonIgnore]
+		public ICollection<Genre> Genres { get; set; }
+
+		[JsonIgnore]
+		public ICollection<Like> Likes { get; set; }
 	}
 }
