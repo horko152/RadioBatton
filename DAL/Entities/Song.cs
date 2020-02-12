@@ -42,6 +42,5 @@ namespace DAL.Entities
 		[JsonIgnore]
 		public User User { get; set; }
 
-
 	}
 }
