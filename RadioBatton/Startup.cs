@@ -1,20 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DAL;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.OpenApi.Models;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-using System.Reflection;
+using System;
 using System.IO;
+using System.Reflection;
 
 namespace RadioBatton
 {
@@ -25,7 +21,7 @@ namespace RadioBatton
 			Configuration = configuration;
 		}
 
-		public Startup(IHostingEnvironment env)
+		public Startup(HostingEnvironment env)
 		{
 			Configuration = new ConfigurationBuilder().SetBasePath(env.ContentRootPath).AddJsonFile("appsettings.json").Build();
 		}
@@ -40,8 +36,13 @@ namespace RadioBatton
 			{
 				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
 			});
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-			//services.AddSingleton<RadioBattonDbContext>();
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+			services.AddSingleton<RadioBattonDbContext>();
+			services.AddSingleton<SongRepository>();
+			services.AddSingleton<UserRepository>();
+			services.AddSingleton<GenreRepository>();
+			services.AddSingleton<LikeRepository>();
+			services.AddControllers();
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo
@@ -50,11 +51,7 @@ namespace RadioBatton
 					Title = "E-Shop Api",
 					Description = "Orders and Order_Items  https://eshopwebapi20190731043135.azurewebsites.net",
 				});
-				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-				c.IncludeXmlComments(xmlPath);
 			});
-			services.AddControllers();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +69,7 @@ namespace RadioBatton
 			app.UseHttpsRedirection();
 
 			app.UseCors(options => options.AllowAnyOrigin());
-
+			ConnectionString = Configuration["ConnectionString:RadioDb"];
 			app.UseStaticFiles();
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.

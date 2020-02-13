@@ -1,21 +1,24 @@
 ﻿using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace DAL
 {
-	class RadioBattonDbContext : DbContext
+	public class RadioBattonDbContext : DbContext
 	{
 		public RadioBattonDbContext() { }
 		public DbSet<User> Users { get; set; }
 		public DbSet<Song> Songs { get; set; }
 		public DbSet<Genre> Genres { get; set; }
 		public DbSet<Like> Likes { get; set; }
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.UseSqlServer(@"Server=DESKTOP-MFSAQ2U;Database=RadioDb;Trusted_Connection=True;");
+		}
+
+		//public RadioBattonDbContext(DbContextOptions<RadioBattonDbContext> options) : base(options)
+		//{
+
+		//}
 
 		//public static string GetConnectionString()
 		//{
