@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -19,12 +20,7 @@ namespace DAL.Entities
 		[Column("description")]
 		public string Description { get; set; }
 
-		//[JsonIgnore]
-		[Column("songid")]
-		public int SongId { get; set; }
-
-		[ForeignKey("SongId")]
 		[JsonIgnore]
-		public Song Song { get; set; }
+		public ICollection<Song> Songs { get; set; }
 	}
 }

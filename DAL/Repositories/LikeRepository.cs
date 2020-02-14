@@ -1,4 +1,6 @@
 ﻿using DAL.Entities;
+using System;
+using System.Linq;
 
 namespace DAL.Repositories
 {
@@ -7,6 +9,19 @@ namespace DAL.Repositories
 		public LikeRepository(RadioBattonDbContext DbContext) : base(DbContext)
 		{
 			this.DbContext = DbContext;
+		}
+
+		public IQueryable<Like> GetLikesBySongId(int id)
+		{
+			IQueryable<Like> likes = DbContext.Likes.ToList().Where(x => x.SongId == id).AsQueryable();
+			if(likes != null)
+			{
+				return likes;
+			}
+			else
+			{
+				throw new ArgumentException();
+			}
 		}
 	}
 }

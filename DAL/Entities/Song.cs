@@ -41,8 +41,12 @@ namespace DAL.Entities
 		[JsonIgnore]
 		public User User { get; set; }
 
+		[Column("genreid")]
+		public int GenreId { get; set; }
+
+		[ForeignKey("GenreId")]
 		[JsonIgnore]
-		public ICollection<Genre> Genres { get; set; }
+		public Genre Genre { get; set; }
 
 		[JsonIgnore]
 		public ICollection<Like> Likes { get; set; }
