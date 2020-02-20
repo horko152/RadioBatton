@@ -8,9 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.IO;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace RadioBatton
 {
@@ -27,7 +30,7 @@ namespace RadioBatton
 		}
 
 		public IConfiguration Configuration { get; }
-		public static string ConnectionString { get; private set; }
+		//public static string ConnectionString { get; private set; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -48,8 +51,8 @@ namespace RadioBatton
 				c.SwaggerDoc("v1", new OpenApiInfo
 				{
 					Version = "v1",
-					Title = "E-Shop Api",
-					Description = "Orders and Order_Items  https://eshopwebapi20190731043135.azurewebsites.net",
+					Title = "Radio Batton",
+					Description = "Diploma work",
 				});
 			});
 		}
@@ -69,7 +72,6 @@ namespace RadioBatton
 			app.UseHttpsRedirection();
 
 			app.UseCors(options => options.AllowAnyOrigin());
-			ConnectionString = Configuration["ConnectionString:RadioDb"];
 			app.UseStaticFiles();
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.

@@ -10,6 +10,11 @@ namespace DAL.Repositories
 		{
 			this.DbContext = DbContext;
 		}
+		public void CreateLike(Like Entity)
+		{
+			DbContext.Add(Entity);
+			DbContext.SaveChanges();
+		}
 
 		public IQueryable<Like> GetLikesBySongId(int id)
 		{

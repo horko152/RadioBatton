@@ -14,23 +14,5 @@ namespace DAL
 		{
 			optionsBuilder.UseSqlServer(@"Server=DESKTOP-MFSAQ2U;Database=RadioDb;Trusted_Connection=True;");
 		}
-
-		//public RadioBattonDbContext(DbContextOptions<RadioBattonDbContext> options) : base(options)
-		//{
-
-		//}
-
-		//public static string GetConnectionString()
-		//{
-		//	return Startup.ConnectionString;
-		//}
-		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		//{
-		//	if (!optionsBuilder.IsConfigured)
-		//	{
-		//		var con = GetConnectionString();
-		//		optionsBuilder.UseSqlServer(con);
-		//	}
-		//}
 	}
 }

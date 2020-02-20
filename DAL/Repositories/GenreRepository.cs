@@ -8,5 +8,11 @@ namespace DAL.Repositories
 		{
 			this.DbContext = DbContext;
 		}
+
+		public void CreateGenre(Genre Entity)
+		{
+			DbContext.Add(Entity);
+			DbContext.SaveChanges();
+		}
 	}
 }
