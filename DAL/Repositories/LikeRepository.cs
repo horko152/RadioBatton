@@ -28,5 +28,19 @@ namespace DAL.Repositories
 				throw new ArgumentException();
 			}
 		}
+
+		public void UpdateLike(int id, Like Entity)
+		{
+			var like = DbContext.Likes.FirstOrDefault(x => x.Id == id);
+			if (like != null)
+			{
+				like.LikeValue = Entity.LikeValue;
+				DbContext.SaveChanges();
+			}
+			else
+			{
+				throw new ArgumentException();
+			}
+		}
 	}
 }

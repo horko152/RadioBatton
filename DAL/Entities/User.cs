@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,6 +30,10 @@ namespace DAL.Entities
 		[Required]
 		[Column("password")]
 		public byte Password { get; set; }
+
+		[Required]
+		[Column("role")]
+		public Role Role { get; set; }
 
 		[JsonIgnore]
 		public ICollection<Song> Songs { get; set; }
