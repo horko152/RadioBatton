@@ -48,21 +48,21 @@ namespace RadioBatton.Controllers
             return like;
         }
 
-        // GET: api/Song/4/likes
-        ///<summary>
-        /// Get Likes By Song
-        ///</summary>
-        [HttpGet("{id:int}")]
-        public IQueryable<Like> GetLikesBySong([FromRoute] int id)
-        {
-            var likes = likeRepository.GetLikesBySongId(id);
-            if (likes == null)
-            {
-                throw new ArgumentException();
-            }
+        //// GET: api/Song/4/likes
+        /////<summary>
+        ///// Get Likes By Song
+        /////</summary>
+        //[HttpGet("{id:int}")]
+        //public IQueryable<Like> GetLikesBySong([FromRoute] int id)
+        //{
+        //    var likes = likeRepository.GetLikesBySongId(id);
+        //    if (likes == null)
+        //    {
+        //        throw new ArgumentException();
+        //    }
 
-            return likes;
-        }
+        //    return likes;
+        //}
 
 
         // PUT: api/Like/5

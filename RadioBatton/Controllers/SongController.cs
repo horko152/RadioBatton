@@ -46,21 +46,21 @@ namespace RadioBatton.Controllers
             return song;
         }
 
-        // GET: api/User/4/songs
-        ///<summary>
-        /// Get Songs By User
-        ///</summary>
-        [HttpGet("{id:int}")]
-        public IQueryable<Song> GetSongsByUser([FromRoute] int id)
-        {
-            var songs = songRepository.GetSongsByUserId(id);
-            if (songs == null)
-            {
-                throw new ArgumentException();
-            }
+        //// GET: api/User/4/songs
+        /////<summary>
+        ///// Get Songs By User
+        /////</summary>
+        //[HttpGet("{id:int}")]
+        //public IQueryable<Song> GetSongsByUser([FromRoute] int id)
+        //{
+        //    var songs = songRepository.GetSongsByUserId(id);
+        //    if (songs == null)
+        //    {
+        //        throw new ArgumentException();
+        //    }
 
-            return songs;
-        }
+        //    return songs;
+        //}
 
         // PUT: api/Song/5
         ///<summary>
