@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class InitDatabase : Migration
+    public partial class Init_Database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,8 @@ namespace DAL.Migrations
                     created_at = table.Column<DateTime>(nullable: false),
                     email = table.Column<string>(nullable: false),
                     username = table.Column<string>(nullable: false),
-                    password = table.Column<byte>(nullable: false)
+                    password = table.Column<string>(nullable: false),
+                    role = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

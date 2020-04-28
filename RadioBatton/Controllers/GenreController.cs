@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RadioBatton.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class GenreController : ControllerBase
@@ -82,7 +83,14 @@ namespace RadioBatton.Controllers
         ///<summary>
         ///Create Genre
         ///</summary>
+        /// <param name="item"></param>
+        /// <response code="200">OK</response>
+        /// <response code="201">Item created</response>
+        /// <response code="400">If the item is null</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Genre> CreateGenre(Genre genre)
         {
             genreRepository.CreateGenre(genre);

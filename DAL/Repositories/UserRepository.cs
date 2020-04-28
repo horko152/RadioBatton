@@ -9,6 +9,11 @@ namespace DAL.Repositories
 		{
 			this.DbContext = DbContext;
 		}
+		public User GetByUsername(string username)
+		{
+			User user = DbContext.Users.Where(u => u.UserName.Equals(username)).First();
+			return user;
+		}
 
 		public void CreateUser(User Entity)
 		{

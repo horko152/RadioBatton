@@ -1,6 +1,7 @@
 ﻿using DAL.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -29,10 +30,11 @@ namespace DAL.Entities
 		public string UserName { get; set; }
 		[Required]
 		[Column("password")]
-		public byte Password { get; set; }
+		public string Password { get; set; }
 
 		[Required]
 		[Column("role")]
+		[DefaultValue(1)]
 		public Role Role { get; set; }
 
 		[JsonIgnore]

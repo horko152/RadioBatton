@@ -5,46 +5,72 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.Entities;
+using DAL.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RadioBatton.Security;
 
 namespace RadioBatton.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("text/html")]
+    [Route("api/login")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpPost("token")]
-        public ActionResult GetToken()
+        private UserRepository userRepository;
+
+        public AuthController(UserRepository userRepository)
         {
-            //security key
-            string securityKey = "This_is_my_key_for_diploma_project";
-            //symmetric security key
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            this.userRepository = userRepository;
+        }
+        // POST: api/login
+        ///<summary>
+        ///Get Token
+        ///</summary>
+        /// <response code="200">OK</response>
+        /// <response code="201">Token created</response>
+        /// <response code="400">Something wrong</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [AllowAnonymous]
+        public ActionResult GenerateToken([FromBody] Credentials credentials)
+        {
 
-            //signing credentials
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            var user = userRepository.GetByUsername(credentials.Username);
 
-            //add claims
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
-            claims.Add(new Claim(ClaimTypes.Role, "Reader"));
-            claims.Add(new Claim("Our_Custom_Claim", "Our custom value"));
-            claims.Add(new Claim("Id", "110"));
+            if (user != null)
+            {
+                if (user.Password.Equals(credentials.Password))
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                        new Claim("id", user.Id.ToString()),
+                    };
+                    claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                    claims.Add(new Claim(ClaimTypes.Role, "user"));
 
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationOptions.SIGNING_KEY));
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //create token
-            var token = new JwtSecurityToken(
-                    issuer: "smesk.in",
-                    audience: "readers",
-                    expires: DateTime.Now.AddHours(1),
-                    signingCredentials: signingCredentials
-                    , claims: claims
-                );
+                    var token = new JwtSecurityToken(
+                        claims: claims,
+                        expires: DateTime.Now.AddMinutes(5),
+                        signingCredentials: creds);
 
-            //return token
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+                    Request.HttpContext.Response.Headers.Add("Authorization", "Bearer " + encodedToken);
+
+                    return Ok();
+                }
+            }
+            return BadRequest("Could not create token");
         }
     }
 }

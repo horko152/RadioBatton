@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RadioBatton.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class SongController : ControllerBase
@@ -96,7 +97,13 @@ namespace RadioBatton.Controllers
         ///<summary>
         ///Create Song
         ///</summary>
+        /// <response code="200">OK</response>
+        /// <response code="201">Song created</response>
+        /// <response code="400">You forgot to fill in something</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Song> CreateSong(Song song)
         {
             songRepository.CreateSong(song);

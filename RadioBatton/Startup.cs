@@ -17,12 +17,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Swashbuckle.AspNetCore.Swagger;
+using RadioBatton.Security;
 
 namespace RadioBatton
 {
 	public class Startup
 	{
-		private char[] securityKey;
+		//private char[] securityKey;
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -39,24 +41,27 @@ namespace RadioBatton
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string securityKey = "This_is_my_key_for_diploma_project";
-			var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
-			
-			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer(options =>
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(cfg =>
+			{
+				cfg.RequireHttpsMetadata = false;
+				cfg.SaveToken = true;
+
+				cfg.TokenValidationParameters = new TokenValidationParameters()
 				{
-					options.TokenValidationParameters = new TokenValidationParameters
-					{
-						//what to validate
-						ValidateIssuer = true,
-						ValidateAudience = true,
-						ValidateIssuerSigningKey = true,
-						//setup validate data
-						ValidIssuer = "smesk.in",
-						ValidAudience = "readers",
-						IssuerSigningKey = symmetricSecurityKey
-					};
-				});
+					ValidateIssuer = false,
+					ValidateAudience = false,
+
+					ValidateLifetime = true,
+
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationOptions.SIGNING_KEY)),
+					ValidateIssuerSigningKey = true
+				};
+			});
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("UserOnly", policy => policy.RequireClaim("Id"));
+			});
 			services.AddCors(c =>
 			{
 				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());

@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.Entities;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace RadioBatton.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         private readonly UserRepository userRepository;
@@ -28,6 +32,7 @@ namespace RadioBatton.Controllers
 		///</summary>
 		[HttpGet]
         [Route("~/api/users")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await userRepository.GetAll().ToListAsync();

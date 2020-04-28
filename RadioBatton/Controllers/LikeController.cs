@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RadioBatton.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class LikeController : ControllerBase
@@ -99,7 +100,13 @@ namespace RadioBatton.Controllers
         ///<summary>
         ///Create Like
         ///</summary>
+        /// <response code="200">OK</response>
+        /// <response code="201">Like created</response>
+        /// <response code="400">If the item is null</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Like> CreateLike(Like like)
         {
             likeRepository.CreateLike(like);

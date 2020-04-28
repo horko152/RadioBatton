@@ -12,7 +12,7 @@ namespace DAL
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer(@"Server=DESKTOP-MFSAQ2U;Database=RadioDb;Trusted_Connection=True;");
+			optionsBuilder.UseSqlServer(@"Server=DESKTOP-MFSAQ2U;Database=RadioBattonDb;Trusted_Connection=True;");
 		}
 	}
 }

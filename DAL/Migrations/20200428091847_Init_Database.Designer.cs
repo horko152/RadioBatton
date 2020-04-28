@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RadioBattonDbContext))]
-    [Migration("20200217120254_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20200428091847_Init_Database")]
+    partial class Init_Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -131,9 +131,14 @@ namespace DAL.Migrations
                         .HasColumnName("email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Password")
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnName("password")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnName("role")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()

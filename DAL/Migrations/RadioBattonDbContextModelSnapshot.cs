@@ -15,7 +15,7 @@ namespace DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -129,9 +129,14 @@ namespace DAL.Migrations
                         .HasColumnName("email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Password")
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnName("password")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnName("role")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
