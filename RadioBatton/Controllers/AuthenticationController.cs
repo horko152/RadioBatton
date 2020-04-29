@@ -10,6 +10,7 @@ using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RadioBatton.Security;
 
@@ -18,12 +19,14 @@ namespace RadioBatton.Controllers
     [Produces("text/html")]
     [Route("api/login")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private UserRepository userRepository;
+        private IConfiguration _config;
 
-        public AuthController(UserRepository userRepository)
+        public AuthenticationController(UserRepository userRepository, IConfiguration config)
         {
+            _config = config;
             this.userRepository = userRepository;
         }
         // POST: api/login
@@ -50,10 +53,9 @@ namespace RadioBatton.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                        new Claim("id", user.Id.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Role, user.Role.ToString())
                     };
-                    claims.Add(new Claim(ClaimTypes.Role, "admin"));
-                    claims.Add(new Claim(ClaimTypes.Role, "user"));
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationOptions.SIGNING_KEY));
                     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

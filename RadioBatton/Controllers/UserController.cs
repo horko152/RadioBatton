@@ -89,6 +89,7 @@ namespace RadioBatton.Controllers
 		///Create User
 		///</summary>
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<User> CreateUser(User user)
         {
             userRepository.CreateUser(user);

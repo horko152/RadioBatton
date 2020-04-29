@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Entities;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,21 +50,22 @@ namespace RadioBatton.Controllers
             return like;
         }
 
-        //// GET: api/Song/4/likes
-        /////<summary>
-        ///// Get Likes By Song
-        /////</summary>
-        //[HttpGet("{id:int}")]
-        //public IQueryable<Like> GetLikesBySong([FromRoute] int id)
-        //{
-        //    var likes = likeRepository.GetLikesBySongId(id);
-        //    if (likes == null)
-        //    {
-        //        throw new ArgumentException();
-        //    }
+        // GET: api/Song/4/likes
+        ///<summary>
+        /// Get Likes By Song
+        ///</summary>
+        [HttpGet]
+        [Route("~/api/likes/{id}/song")]
+        public IQueryable<Like> GetLikesBySong([FromRoute] int id)
+        {
+            var likes = likeRepository.GetLikesBySongId(id);
+            if (likes == null)
+            {
+                throw new ArgumentException();
+            }
 
-        //    return likes;
-        //}
+            return likes;
+        }
 
 
         // PUT: api/Like/5
@@ -104,6 +106,7 @@ namespace RadioBatton.Controllers
         /// <response code="201">Like created</response>
         /// <response code="400">If the item is null</response>
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

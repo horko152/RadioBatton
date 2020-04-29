@@ -20,7 +20,7 @@ namespace DAL.Repositories
 		//public IQueryable<Song> GetSongsByArtist(string artist)
 		//{
 		//	IQueryable<Song> songs = DbContext.Songs.ToList().Where(x => x.Artist == artist).AsQueryable();
-		//	if(songs != null)
+		//	if (songs != null)
 		//	{
 		//		return songs;
 		//	}
@@ -43,18 +43,18 @@ namespace DAL.Repositories
 			}
 		}
 
-		//public IQueryable<Song> GetSongsByGenreId(int id)
-		//{
-		//	IQueryable<Song> songs = DbContext.Songs.ToList().Where(x => x.GenreId == id).AsQueryable();
-		//	if(songs !=null)
-		//	{
-		//		return songs;
-		//	}
-		//	else
-		//	{
-		//		throw new ArgumentException();
-		//	}
-		//}
+		public IQueryable<Song> GetSongsByGenreId(int id)
+		{
+			IQueryable<Song> songs = DbContext.Songs.ToList().Where(x => x.GenreId == id).AsQueryable();
+			if (songs != null)
+			{
+				return songs;
+			}
+			else
+			{
+				throw new ArgumentException();
+			}
+		}
 
 		public void UpdateSong(int id, Song Entity)
 		{

@@ -24,7 +24,6 @@ namespace RadioBatton
 {
 	public class Startup
 	{
-		//private char[] securityKey;
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
