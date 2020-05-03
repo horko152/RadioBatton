@@ -97,7 +97,11 @@ namespace RadioBatton
 
 			app.UseHttpsRedirection();
 
-			app.UseCors(options => options.AllowAnyOrigin());
+			app.UseCors(options => options.WithOrigins("http://localhost:3000")
+			.AllowAnyHeader()
+			.AllowAnyMethod()
+			.AllowCredentials()
+			);
 			app.UseStaticFiles();
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.

@@ -19,7 +19,7 @@ namespace RadioBatton.Controllers
     [Produces("text/html")]
     [Route("api/login")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : Controller
     {
         private UserRepository userRepository;
         private IConfiguration _config;
@@ -41,7 +41,7 @@ namespace RadioBatton.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [AllowAnonymous]
-        public ActionResult GenerateToken([FromBody] Credentials credentials)
+        public IActionResult GenerateToken([FromBody] Credentials credentials)
         {
 
             var user = userRepository.GetByUsername(credentials.Username);
@@ -62,15 +62,16 @@ namespace RadioBatton.Controllers
 
                     var token = new JwtSecurityToken(
                         claims: claims,
-                        expires: DateTime.Now.AddMinutes(5),
+                        expires: DateTime.Now.AddDays(1),
                         signingCredentials: creds);
 
                     var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-                    Request.HttpContext.Response.Headers.Add("Authorization", "Bearer " + encodedToken);
-
-                    return Ok();
+                    //Request.HttpContext.Response.Headers.Add("Authorization", "Bearer " + encodedToken);
+                    //Request.HttpContext.Response.Body.Write();
+                    return Json(encodedToken);
                 }
+                return BadRequest(new { errorText = "Invalid username or password" });
             }
             return BadRequest("Could not create token");
         }

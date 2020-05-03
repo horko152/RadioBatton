@@ -1,4 +1,5 @@
 ﻿using DAL.Entities;
+using System;
 using System.Linq;
 
 namespace DAL.Repositories
@@ -11,8 +12,11 @@ namespace DAL.Repositories
 		}
 		public User GetByUsername(string username)
 		{
-			User user = DbContext.Users.Where(u => u.UserName.Equals(username)).First();
+			User user = DbContext.Users.FirstOrDefault(x => x.UserName == username);
+			//User user = DbContext.Users.Where(u => u.UserName.Equals(username)).First();
 			return user;
+
+
 		}
 
 		public void CreateUser(User Entity)
