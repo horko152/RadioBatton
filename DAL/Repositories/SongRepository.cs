@@ -1,13 +1,19 @@
 ﻿using DAL.Entities;
+using DAL.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DAL.Repositories
 {
 	public class SongRepository : GeneralRepository<Song>
 	{
-		public SongRepository(RadioBattonDbContext DbContext) : base(DbContext)
+		private readonly LikeRepository likeRepository;
+		private readonly UserRepository userRepository;
+		public SongRepository(RadioBattonDbContext DbContext, LikeRepository likeRepository, UserRepository userRepository) : base(DbContext)
 		{
+			this.likeRepository = likeRepository;
+			this.userRepository = userRepository;
 			this.DbContext = DbContext;
 		}
 
@@ -15,6 +21,25 @@ namespace DAL.Repositories
 		{
 			DbContext.Add(Entity);
 			DbContext.SaveChanges();
+		}
+
+		public SongMain GetSongForMainPageById(int id)
+		{
+			var song = GetById(id);
+			if (song == null)
+			{
+				throw new ArgumentException();
+			}
+			SongMain songinfo = new SongMain()
+			{
+				Id = song.Id,
+				Artist = song.Artist,
+				Name = song.SongName,
+				Author = userRepository.GetById(song.UserId).UserName,
+				FilePath = song.File
+			};
+
+			return songinfo;
 		}
 
 		//public IQueryable<Song> GetSongsByArtist(string artist)
@@ -42,6 +67,28 @@ namespace DAL.Repositories
 				throw new ArgumentException();
 			}
 		}
+
+		public IQueryable<SongInfo> GetSongInfosByUser(int id)
+		{
+			var songs = GetSongsByUserId(id);
+			var songInfos = new List<SongInfo>();
+			if (songs == null)
+			{
+				throw new ArgumentException();
+			}
+			foreach (var item in songs)
+			{
+				songInfos.Add(new SongInfo
+				{
+					Id = item.Id,
+					Artist = item.Artist,
+					Name = item.SongName,
+					Ranking = likeRepository.GetSongRanking(item.Id)
+				});
+			}
+			return songInfos.AsQueryable();
+		}
+
 
 		public IQueryable<Song> GetSongsByGenreId(int id)
 		{

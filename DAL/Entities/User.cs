@@ -32,6 +32,15 @@ namespace DAL.Entities
 		[Column("password")]
 		public string Password { get; set; }
 
+		[Column("firstname")]
+		public string FirstName { get; set; }
+
+		[Column("lastname")]
+		public string LastName { get; set; }
+
+		[Column("userinfo")]
+		public string UserInfo { get; set; }
+
 		[Required]
 		[Column("role")]
 		[DefaultValue(1)]

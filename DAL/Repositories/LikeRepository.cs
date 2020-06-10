@@ -19,7 +19,7 @@ namespace DAL.Repositories
 		public IQueryable<Like> GetLikesBySongId(int id)
 		{
 			IQueryable<Like> likes = DbContext.Likes.ToList().Where(x => x.SongId == id).AsQueryable();
-			if(likes != null)
+			if (likes != null)
 			{
 				return likes;
 			}
@@ -34,8 +34,8 @@ namespace DAL.Repositories
 			int countOfLikes = 0;
 			int countOfDislikes = 0;
 			int allLikes = likes.Count();
-			double ranking = 50;
-			foreach(var item in likes)
+			double ranking = 0;
+			foreach (var item in likes)
 			{
 				if (item.LikeValue == true)
 				{
@@ -49,6 +49,14 @@ namespace DAL.Repositories
 			if (countOfLikes != countOfDislikes)
 			{
 				ranking = (countOfLikes / allLikes) * 100;
+			}
+			else if (countOfLikes == countOfDislikes && (countOfLikes != 0 || countOfDislikes != 0))
+			{
+				ranking = 50;
+			}
+			else
+			{
+				ranking = 0;
 			}
 			return Convert.ToInt32(ranking);
 		}

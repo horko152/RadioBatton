@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Models;
 using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,7 @@ namespace RadioBatton.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class SongController : ControllerBase
+    public class SongController : Controller
     {
         private readonly SongRepository songRepository;
         public SongController(SongRepository songRepository)
@@ -48,6 +49,24 @@ namespace RadioBatton.Controllers
             return song;
         }
 
+
+        // GET: api/SongInfo/5
+        /// <summary>
+        /// Get Song Info by Song Id
+        /// </summary>
+        [HttpGet]
+        [Route("~/api/songmaininfo/{id}")]
+        public ActionResult<SongMain> GetSongInfoForMainPage([FromRoute] int id)
+        {
+            var song = songRepository.GetSongForMainPageById(id);
+            if (song == null)
+            {
+                return NotFound();
+            }
+
+            return song;
+        }
+
         // GET: api/user/4/songs
         /// <summary>
         /// Get Songs By User
@@ -61,15 +80,32 @@ namespace RadioBatton.Controllers
             {
                 throw new ArgumentException();
             }
+            return songs;
+        }
+        //GET: api/songinfo/user/1
+        /// <summary>
+        /// Get SongInfo in Profile Page By User Id
+        /// </summary>
+        /// <param name="id">Id of User</param>
+        /// <returns></returns>
+		[HttpGet]
+		[Route("~/api/songsinfo/user/{id}")]
+		public IQueryable<SongInfo> GetSongInfo([FromRoute] int id)
+		{
+            var songs = songRepository.GetSongInfosByUser(id);
+            if (songs == null)
+            {
+                throw new ArgumentException();
+            }
 
             return songs;
         }
 
-        // GET: api/genre/4/songs
-        /// <summary>
-        /// Get Songs By Genre
-        /// </summary>
-        [HttpGet]
+		// GET: api/genre/4/songs
+		/// <summary>
+		/// Get Songs By Genre
+		/// </summary>
+		[HttpGet]
         [Route("~/api/genre/{id}/songs")]
         public IQueryable<Song> GetSongsByGenre([FromRoute] int id)
         {
@@ -78,7 +114,7 @@ namespace RadioBatton.Controllers
             {
                 throw new ArgumentException();
             }
-
+            
             return songs;
         }
 
