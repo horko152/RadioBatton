@@ -5,15 +5,10 @@ using System.Threading.Tasks;
 
 namespace RadioBatton.Security
 {
-	public class Credentials
+	public class RegistrCredentials
 	{
-		//public Credentials(string userName, string password)
-		//{
-		//	Username = userName;
-		//	Password = password;
-		//}
-
 		public string Username { get; set; }
+		public string Email { get; set; }
 		public string Password { get; set; }
 	}
 }

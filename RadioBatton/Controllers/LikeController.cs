@@ -55,7 +55,7 @@ namespace RadioBatton.Controllers
         /// Get Likes By Song
         ///</summary>
         [HttpGet]
-        [Route("~/api/likes/{id}/song")]
+        [Route("~/api/song/{id}/likes")]
         public IQueryable<Like> GetLikesBySong([FromRoute] int id)
         {
             var likes = likeRepository.GetLikesBySongId(id);
@@ -67,6 +67,17 @@ namespace RadioBatton.Controllers
             return likes;
         }
 
+        // GET: api/ranking/song/4
+        ///<summary>
+        /// Get Ranking By Song
+        ///</summary>
+        [HttpGet]
+        [Route("~/api/ranking/song/{id}")]
+        public int GetRankingBySong([FromRoute] int id)
+        {
+            var likes = likeRepository.GetSongRanking(id);
+            return likes;
+        }
 
         // PUT: api/Like/5
         ///<summary>

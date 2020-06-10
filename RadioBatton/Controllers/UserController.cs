@@ -10,13 +10,14 @@ using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using RadioBatton.Security;
 
 namespace RadioBatton.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserRepository userRepository;
@@ -32,7 +33,7 @@ namespace RadioBatton.Controllers
 		///</summary>
 		[HttpGet]
         [Route("~/api/users")]
-        [Authorize]
+		[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await userRepository.GetAll().ToListAsync();
@@ -92,8 +93,15 @@ namespace RadioBatton.Controllers
         [AllowAnonymous]
         public ActionResult<User> CreateUser(User user)
         {
+            //if(user == null) 
+            //{ 
             userRepository.CreateUser(user);
+            //var result = new AuthenticationController();
+            //var credentials = new Credentials(user.UserName, user.Password);
+            //return Json(result.GenerateToken(credentials));
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            //}
+            //return BadRequest("User undifined");
         }
 
         // DELETE: api/User/5

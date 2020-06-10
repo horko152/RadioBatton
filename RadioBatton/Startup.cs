@@ -47,11 +47,12 @@ namespace RadioBatton
 
 				cfg.TokenValidationParameters = new TokenValidationParameters()
 				{
-					ValidateIssuer = false,
+					ValidateIssuer = true,
+					ValidIssuer = "https://localhost:44360/",
 					ValidateAudience = false,
-
+					ValidAudience = "https://localhost:44360/",
 					ValidateLifetime = true,
-
+					ClockSkew = TimeSpan.Zero,
 					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationOptions.SIGNING_KEY)),
 					ValidateIssuerSigningKey = true
 				};
@@ -59,7 +60,8 @@ namespace RadioBatton
 
 			services.AddAuthorization(options =>
 			{
-				options.AddPolicy("UserOnly", policy => policy.RequireClaim("Id"));
+				options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("Role", "Admin"));
+				options.AddPolicy("OnlyUsers", policy => policy.RequireClaim("Role", "User"));
 			});
 			services.AddCors(c =>
 			{
@@ -80,6 +82,24 @@ namespace RadioBatton
 					Title = "RadioBatton",
 					Description = "Diploma work",
 				});
+				var securitySchema = new OpenApiSecurityScheme
+				{
+					Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+					Name = "Authorization",
+					In = ParameterLocation.Header,
+					Type = SecuritySchemeType.Http,
+					Scheme = "bearer",
+					Reference = new OpenApiReference
+					{
+						Type = ReferenceType.SecurityScheme,
+						Id = "Bearer"
+					}
+				};
+				c.AddSecurityDefinition("Bearer", securitySchema);
+
+				var securityRequirement = new OpenApiSecurityRequirement();
+				securityRequirement.Add(securitySchema, new[] { "Bearer" });
+				c.AddSecurityRequirement(securityRequirement);
 			});
 		}
 

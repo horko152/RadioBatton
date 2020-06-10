@@ -15,8 +15,11 @@ namespace DAL.Repositories
 			User user = DbContext.Users.FirstOrDefault(x => x.UserName == username);
 			//User user = DbContext.Users.Where(u => u.UserName.Equals(username)).First();
 			return user;
-
-
+		}
+		public User GetByEmail(string email)
+		{
+			User user = DbContext.Users.FirstOrDefault(x => x.Email == email);
+			return user;
 		}
 
 		public void CreateUser(User Entity)

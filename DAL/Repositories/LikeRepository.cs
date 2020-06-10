@@ -28,6 +28,30 @@ namespace DAL.Repositories
 				throw new ArgumentException();
 			}
 		}
+		public int GetSongRanking(int id)
+		{
+			var likes = GetLikesBySongId(id);
+			int countOfLikes = 0;
+			int countOfDislikes = 0;
+			int allLikes = likes.Count();
+			double ranking = 50;
+			foreach(var item in likes)
+			{
+				if (item.LikeValue == true)
+				{
+					countOfLikes++;
+				}
+				else
+				{
+					countOfDislikes++;
+				}
+			}
+			if (countOfLikes != countOfDislikes)
+			{
+				ranking = (countOfLikes / allLikes) * 100;
+			}
+			return Convert.ToInt32(ranking);
+		}
 
 		public void UpdateLike(int id, Like Entity)
 		{

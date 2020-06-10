@@ -67,7 +67,7 @@ namespace RadioBatton.Controllers
 
         // GET: api/genre/4/songs
         /// <summary>
-        /// Get Songs By User
+        /// Get Songs By Genre
         /// </summary>
         [HttpGet]
         [Route("~/api/genre/{id}/songs")]
